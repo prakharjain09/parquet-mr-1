@@ -1083,6 +1083,18 @@ public class ParquetFileReader implements Closeable {
     return rowGroup;
   }
 
+  /**
+   * @return the {@link BlockMetaData} of the last row group returned by
+   *         calling {@link #readNextRowGroup()} or {@link #readNextFilteredRowGroup()}.
+   */
+  public BlockMetaData getLastProcessedBlockMetaData() {
+    int lastProcessedBlock = currentBlock - 1;
+    if (lastProcessedBlock == -1) {
+      throw new RuntimeException("no processed block yet");
+    }
+    return blocks.get(lastProcessedBlock);
+  }
+
   private void readChunkPages(Chunk chunk, BlockMetaData block, ColumnChunkPageReadStore rowGroup) throws IOException {
     if (null == fileDecryptor || fileDecryptor.plaintextFile()) {
       rowGroup.addColumn(chunk.descriptor.col, chunk.readAllPages());

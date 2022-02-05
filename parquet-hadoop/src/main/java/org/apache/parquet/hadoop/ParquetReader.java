@@ -140,6 +140,13 @@ public class ParquetReader<T> implements Closeable {
     }
   }
 
+  /**
+   * Returns the ROW_INDEX of the last read row.
+   */
+  public long getCurrentRowIndex() throws IOException {
+    return reader.getCurrentRowIndex();
+  }
+
   private void initReader() throws IOException {
     if (reader != null) {
       reader.close();
@@ -311,7 +318,7 @@ public class ParquetReader<T> implements Closeable {
       optionsBuilder.withCodecFactory(codecFactory);
       return this;
     }
-    
+
     public Builder<T> withDecryption(FileDecryptionProperties fileDecryptionProperties) {
       optionsBuilder.withDecryption(fileDecryptionProperties);
       return this;
